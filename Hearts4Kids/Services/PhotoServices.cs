@@ -76,21 +76,21 @@ namespace Hearts4Kids.Services
         {
             return Path.Combine(HostingEnvironment.MapPath(defaultDir), ImageSizes[0].FolderName);
         }
-        public static string processLogo(HttpPostedFileBase file)
+        public static string ProcessLogo(HttpPostedFileBase file)
         {
             string basePath = HostingEnvironment.MapPath(logoDir);
             var newSize = ImageSizes[1];
             string newFileName = newSize.GetFileNameWithExt(file.FileName);
-            resizeImg(file, newSize, Path.Combine(basePath, newFileName));
+            ResizeImg(file, newSize, Path.Combine(basePath, newFileName));
             return logoDir + '/' + newFileName;
         }
-        public static string processBioImage(HttpPostedFileBase file)
+        public static string ProcessBioImage(HttpPostedFileBase file)
         {
             string basePath = HostingEnvironment.MapPath(defaultDir);
             var newSize = ImageSizes[0];
             string newFileName = GetBioFileName(newSize.GetFileNameWithExt(file.FileName));
             //multiResizeImage(file, newSize, basePath, newFileName);
-            multiResizeImage(file, newSize, basePath, newFileName);
+            MultiResizeImage(file, newSize, basePath, newFileName);
             var returnSize = ImageSizes[1];
             return defaultDir + '/' + returnSize.FolderName + '/' + GetBioFileName(returnSize.GetFileNameWithExt(file.FileName));
         }
@@ -99,17 +99,17 @@ namespace Hearts4Kids.Services
         {
             return  bioPrefix + fileName;
         }
-        static void resizeImg(HttpPostedFileBase file, SiteImageSize newSize, string serverPath)
+        static void ResizeImg(HttpPostedFileBase file, SiteImageSize newSize, string serverPath)
         {
             using (var srcImage = Image.FromStream(file.InputStream))
             {
                 Resize(srcImage, serverPath, newSize.Height, newSize.ImgFmt, newSize.Quality);
             }
         }
-        internal static string multiResizeImage(HttpPostedFileBase file, SiteImageSize newSize, string basePath, string newFileName)
+        internal static string MultiResizeImage(HttpPostedFileBase file, SiteImageSize newSize, string basePath, string newFileName)
         {
-            resizeImg(file, newSize, Path.Combine(basePath, newSize.FolderName, newFileName));
-            return multiResizeImage(newFileName);
+            ResizeImg(file, newSize, Path.Combine(basePath, newSize.FolderName, newFileName));
+            return MultiResizeImage(newFileName);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Hearts4Kids.Services
         /// </summary>
         /// <param name="imageName"></param>
         /// <param name="virtualPath"></param>
-        public static string multiResizeImage(string imageName, string virtualPath= defaultDir)
+        public static string MultiResizeImage(string imageName, string virtualPath= defaultDir)
         {
             string basePath = HostingEnvironment.MapPath(virtualPath);
             string path = Path.Combine(basePath, ImageSizes[0].FolderName,imageName);
@@ -250,15 +250,19 @@ namespace Hearts4Kids.Services
                 }
             }
         }
-        public static void makeBanner(IEnumerable<string> imageNames)
+        public static void MakeBanner(IEnumerable<string> imageNames)
         {
             string dir = Path.Combine(HostingEnvironment.MapPath(defaultDir), ImageSizes[1].FolderName);
-            IList<string> fns = imageNames.Select(i => dir + '\\' + i.Substring(i.LastIndexOf('/') + 1)).ToList();
+            IList<string> fns = imageNames.Select(i => {
+                    var d = HttpUtility.UrlDecode(i);
+                    return dir + '\\' + d.Substring(d.LastIndexOf('/') + 1);
+                }).ToList();
             using (var bm = CombineBitmap(fns))
             {
                 bm.Save(HostingEnvironment.MapPath(bannerPath), ImageFormat.Jpeg);
                 //Resize(bm,bannerPath, bannerHeight,ImageFormat.Jpeg);
             }
+            BannerUpdated = DateTime.Now;
                 
         }
         public static Bitmap CombineBitmap(IList<string> files)
@@ -359,6 +363,7 @@ namespace Hearts4Kids.Services
             bool isDiv=false;
             string widthStr = string.Format("width:{0}px;", width);
             string translateStr = string.Format("translateX(-{0}px)", pullLeft);
+            var bannerImage = $"background-image: url(\"/Content/Photos/Banner.jpg?{DateTime.UtcNow:s}\");";
             ApplyConversionToFile(cssFile, str => {
                     if (isDiv)
                     {
@@ -366,7 +371,8 @@ namespace Hearts4Kids.Services
                         {
                             isDiv = false;
                         }
-                        return Regex.Replace(str, @"width:\s*.*;",widthStr);
+                        var returnString = Regex.Replace(str, @"width:\s*.*;", widthStr);
+                        return Regex.Replace(returnString, "background-image:\\s*url\\(\"/Content/Photos/Banner\\.jpg\\??[0-9\\-T:Z]*\"\\);", bannerImage);
                     }
                     else
                     {
@@ -374,7 +380,6 @@ namespace Hearts4Kids.Services
                         if (isDiv) { return str; }
                         return Regex.Replace(str, @"translateX\s*\(-.*\)",translateStr);
                     }
-                    
                 });
         }
         private static void ApplyConversionToFile(string filename, Func<string,string> convert)
@@ -394,6 +399,23 @@ namespace Hearts4Kids.Services
 
             File.Delete(filename);
             File.Move(temp, filename);
+        }
+        private static DateTime _bannerUpdated;
+        internal static DateTime BannerUpdated
+        {
+            get
+            {
+                if (_bannerUpdated == default(DateTime))
+                {
+                    var path = HostingEnvironment.MapPath(bannerPath);
+                    _bannerUpdated = File.GetCreationTime(path);
+                }
+                return _bannerUpdated;
+            }
+            private set
+            {
+                _bannerUpdated = value;
+            }
         }
     }
 }

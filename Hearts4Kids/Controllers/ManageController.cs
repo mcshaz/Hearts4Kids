@@ -90,7 +90,7 @@ namespace Hearts4Kids.Controllers
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 message = ManageMessageId.RemoveLoginSuccess;
             }
@@ -162,7 +162,7 @@ namespace Hearts4Kids.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -177,7 +177,7 @@ namespace Hearts4Kids.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", "Manage");
         }
@@ -207,7 +207,7 @@ namespace Hearts4Kids.Controllers
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
@@ -228,7 +228,7 @@ namespace Hearts4Kids.Controllers
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
@@ -256,7 +256,7 @@ namespace Hearts4Kids.Controllers
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await AppSignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }

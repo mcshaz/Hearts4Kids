@@ -27,7 +27,7 @@ namespace Hearts4Kids.Controllers
         {
             UserManager = userManager;
             RoleManager = roleManager;
-            SignInManager = signInManager;
+            AppSignInManager = signInManager;
         }
         // GET: BaseUser
         internal static ApplicationUserManager GetApplicationUserManager()
@@ -36,7 +36,7 @@ namespace Hearts4Kids.Controllers
         }
 
 
-        protected ApplicationSignInManager SignInManager
+        protected ApplicationSignInManager AppSignInManager
         {
             get
             {
@@ -104,8 +104,7 @@ namespace Hearts4Kids.Controllers
         {
             get
             {
-                return _isAdmin.HasValue ? _isAdmin.Value
-                    : (_isAdmin = UserManager.IsInRole(CurrentUser.Id, Domain.DomainConstants.Admin)).Value;
+                return _isAdmin ?? (_isAdmin = UserManager.IsInRole(CurrentUser.Id, Domain.DomainConstants.Admin)).Value;
             }
         }
         #region email

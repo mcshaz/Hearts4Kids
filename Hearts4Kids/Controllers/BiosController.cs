@@ -49,7 +49,7 @@ namespace Hearts4Kids.Controllers
                 bool isAdmin = await IsAdminAsync();
                 if (bioImg != null)
                 {
-                    model.BioPicUrl = PhotoServices.processBioImage(bioImg);
+                    model.BioPicUrl = PhotoServices.ProcessBioImage(bioImg);
                 }
                 
                 await MemberDetailServices.UpdateBios(model, ModelState, IsAdmin);

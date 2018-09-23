@@ -3,7 +3,7 @@
         -webkit-transform: translateX(0);  
     }     
     100% { 
-        -webkit-transform: translateX(-2885px); 
+        -webkit-transform: translateX(-1030px); 
     }
 }
 @-moz-keyframes moveSlideshow {
@@ -11,7 +11,7 @@
         -moz-transform:    translateX(0); 
     }    
     100% { 
-        -moz-transform:    translateX(-2885px); 
+        -moz-transform:    translateX(-1030px); 
     }
 }
 @-o-keyframes moveSlideshow {
@@ -19,7 +19,7 @@
         -o-transform: translateX(0);  
     }    
     100% { 
-        -o-transform: translateX(-2885px);  
+        -o-transform: translateX(-1030px);  
     }
 }
 @-ms-keyframes moveSlideShow {
@@ -27,7 +27,7 @@
         -ms-transform: translateX(0);  
     }    
     100% { 
-        -ms-transform: translateX(-2885px);  
+        -ms-transform: translateX(-1030px);  
     }
 }
 @keyframes moveSlideshow {
@@ -35,19 +35,19 @@
         transform: translateX(0);  
     }    
     100% { 
-        transform: translateX(-2885px);  
+        transform: translateX(-1030px);  
     }
 }
 .photoContainer div.photobanner  {
     /*split into individual propertties as IE 8 didn't support all properties */
     position: absolute;
-    background-image: url("/Content/Photos/Banner.jpg");
+    background-image: url("/Content/Photos/Banner.jpg?2018-09-23T08:27:50");
     background-repeat: repeat;
     background-color: #000000; /* rgba(0, 0, 0, 0) */
     background-attachment: scroll;
     background-position: 0 0;
     height: 100%;
-    width:4122px;
+    width:2060px;
     /*safari needs either a width or translateX in px, or it doesn't commence animation until after 1st cycle*/
     left: 0;
     top: 0;
@@ -72,7 +72,7 @@
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-play-state: running;
 
-        animation-name: moveSlideshow;
+    animation-name: moveSlideshow;
     animation-duration: 120s;
     animation-timing-function: linear;
     animation-delay: 0s;

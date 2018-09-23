@@ -26,7 +26,7 @@ namespace Hearts4Kids.Controllers
         [Authorize(Roles =Domain.DomainConstants.Admin), HttpPost, ValidateAntiForgeryToken]
         public ActionResult MakeBanner(string[] forBanner)
         {
-            PhotoServices.makeBanner(forBanner);
+            PhotoServices.MakeBanner(forBanner);
             return RedirectToAction("Index","Home");
         }
         public ActionResult Upload()
@@ -55,7 +55,7 @@ namespace Hearts4Kids.Controllers
                     x.FileName = Request.Files[i].FileName;// default is filename suffixed with filetimestamp
                     //x.ThrowExceptions = true;//default is false, if false exception message is set in error property
                 });
-                st.thumbnailUrl = PhotoServices.multiResizeImage(st.SavedFileName).Substring(1); //hack
+                st.thumbnailUrl = PhotoServices.MultiResizeImage(st.SavedFileName).Substring(1); //hack
                 statuses.Add(st);
             }
 

@@ -36,10 +36,10 @@ namespace Hearts4Kids.Controllers
             {
                 if (logoImg != null)
                 {
-                    model.LogoSrc = PhotoServices.processLogo(logoImg);
+                    model.LogoSrc = PhotoServices.ProcessLogo(logoImg);
                 }
                 await ReceiptServices.CreateReceipt(model, ModelState, (subscriberId, code, subscriptionType) =>
-                     Url.Action("Unsubscribe", "Subscription", new { subscriberId = subscriberId, code = code, subscriptionType = subscriptionType }, protocol: Request.Url.Scheme));
+                     Url.Action("Unsubscribe", "Subscription", new { subscriberId, code, subscriptionType }, protocol: Request.Url.Scheme));
                 if (ModelState.IsValid)
                 {
                     ModelState.Clear();
